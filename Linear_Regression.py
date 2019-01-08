@@ -45,18 +45,18 @@ class LinearRegression:
         y为训练集目标，为m维向量
         n为元数，m为样本量
         """
-        learning_rate = 0.01
-        pre_y = self.predict(x)
-        for i in range(self._paras_size - 1):
-            self.parameters[i] -= learning_rate * np.mean((pre_y - y) * x[:, i:i + 1])
-        self.parameters[-1] -= learning_rate * np.mean(pre_y - y)
-
         # learning_rate = 0.01
-        # m = len(y)  # 样本量
         # pre_y = self.predict(x)
-        # cost = learning_rate * (pre_y - y) / len(y)  # 此处为损失函数对pre_y求导后的结果
-        # x = np.np.c_[x, np.ones(m)]  # 将输入变为增广向量
-        # self.parameters = x @ cost
+        # for _i in range(self._paras_size - 1):
+        #     self.parameters[_i] -= learning_rate * np.mean((pre_y - y) * x[:, _i:_i + 1])
+        # self.parameters[-1] -= learning_rate * np.mean(pre_y - y)
+
+        learning_rate = 0.01
+        m = len(y)  # 样本量
+        pre_y = self.predict(x)
+        cost = learning_rate * (pre_y - y) / m  # 此处为损失函数对pre_y求导后的结果
+        x = np.c_[x, np.ones(m)]  # 将输入变为增广向量
+        self.parameters -= x.T @ cost
 
 
 if __name__ == "__main__":
@@ -73,6 +73,6 @@ if __name__ == "__main__":
         LR_test.fit(X_train, y_train)
         if not i % 100:
             print(loss_function(LR_test(X_train), y_train))
-            plt.plot(X_test, LR_test(X_test))
             plt.scatter(X_train, y_train)
+            plt.plot(X_test, LR_test(X_test))
             plt.show()
