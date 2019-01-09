@@ -1,4 +1,4 @@
-from Linear_Regression import LinearRegression,loss_function
+from Linear_Regression import LinearRegression, mean_square_error
 import numpy as np
 
 
@@ -23,9 +23,10 @@ class PolynomialRegression(LinearRegression):
 
 if __name__ == "__main__":
     PR_test = PolynomialRegression(1, np.exp, np.log)
-    X = np.array([[1]])
+    X = np.array([[1],[2],[3]])
+    Y = np.exp(X)
     print(PR_test(X))
-    for i in range(100):
-        PR_test.fit(X, X)
-        print(loss_function(PR_test(X),X))
+    for i in range(1000):
+        PR_test.fit(X, Y)
+        print(mean_square_error(PR_test(X), Y))
     print(PR_test(X))

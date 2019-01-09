@@ -1,10 +1,8 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
 
 
-def loss_function(x, y):
-    """损失函数
+def mean_square_error(x, y):
+    """均方误差函数
     返回x-y的L2范数
     """
     # out = 0
@@ -54,7 +52,7 @@ class LinearRegression:
         learning_rate = 0.01
         m = len(y)  # 样本量
         pre_y = self._predict(x)
-        cost = learning_rate * (pre_y - y) / m  # 此处为损失函数对pre_y求导后的结果
+        cost = learning_rate * (pre_y - y) / m  # 此处为均方误差函数对pre_y求导后的结果
         x = np.c_[x, np.ones(m)]  # 将输入变为增广向量
         self.parameters -= x.T @ cost
 
@@ -62,11 +60,12 @@ class LinearRegression:
 if __name__ == "__main__":
     n = 2
     LR_test = LinearRegression(n)
-    data = np.array([[1, 2], [2, 3]])
+    X = np.array([[1, 2], [2, 3]])
+    Y=np.array([[3], [5]])
     for i in range(500):
-        LR_test.fit(data, [[3], [5]])
-        print(loss_function(LR_test(data), [[3], [5]]))
-    print(LR_test(data))
+        LR_test.fit(X,Y)
+        print(mean_square_error(LR_test(X), Y))
+    print(LR_test(X))
     # n = 2
     # LR_test = LinearRegression(n)
     # data = np.arange(-99, 100).reshape(-1, n) / 100
