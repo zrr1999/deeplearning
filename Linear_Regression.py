@@ -18,17 +18,17 @@ def loss_function(x, y):
 class LinearRegression:
     def __init__(self, n):
         """初始化
-        初始化n+1个参数，用n+1维向量表示，n维元数
+        初始化n+1个参数，用n+1维列向量表示，n为元数
         """
         self.parameters = np.random.randn(n + 1).reshape(-1, 1)
         self._paras_size = n + 1
 
     def __call__(self, x):
-        return self.predict(x)
+        return self._predict(x)
 
-    def predict(self, x):
+    def _predict(self, x):
         """预测函数
-        x为m*n维矩阵
+        x为m*n矩阵
         x'为x的增广矩阵，尺寸为m*(n+1)
         返回输入x'各分量的线性累加
         """
@@ -41,8 +41,8 @@ class LinearRegression:
 
     def fit(self, x, y):
         """训练参数
-        x为训练集自变量，为m*n维矩阵
-        y为训练集目标，为m维向量
+        x为训练集自变量，为m*n矩阵
+        y为训练集目标，为m*1矩阵
         n为元数，m为样本量
         """
         # learning_rate = 0.01
@@ -53,26 +53,33 @@ class LinearRegression:
 
         learning_rate = 0.01
         m = len(y)  # 样本量
-        pre_y = self.predict(x)
+        pre_y = self._predict(x)
         cost = learning_rate * (pre_y - y) / m  # 此处为损失函数对pre_y求导后的结果
         x = np.c_[x, np.ones(m)]  # 将输入变为增广向量
         self.parameters -= x.T @ cost
 
 
 if __name__ == "__main__":
-    n = 1
+    n = 2
     LR_test = LinearRegression(n)
-    data = np.arange(-99, 100).reshape(-1, n) / 100
-
-    X_train, X_test, y_train, y_test = train_test_split(
-        data, 10 + data * 5 + 0.1 * np.random.randn(199).reshape(-1, n),
-        test_size=0.25, random_state=0)
-    plt.scatter(X_train, y_train)
-
-    for i in range(1000):
-        LR_test.fit(X_train, y_train)
-        if not i % 100:
-            print(loss_function(LR_test(X_train), y_train))
-            plt.scatter(X_train, y_train)
-            plt.plot(X_test, LR_test(X_test))
-            plt.show()
+    data = np.array([[1, 2], [2, 3]])
+    for i in range(500):
+        LR_test.fit(data, [[3], [5]])
+        print(loss_function(LR_test(data), [[3], [5]]))
+    print(LR_test(data))
+    # n = 2
+    # LR_test = LinearRegression(n)
+    # data = np.arange(-99, 100).reshape(-1, n) / 100
+    #
+    # X_train, X_test, y_train, y_test = train_test_split(
+    #     data, 10 + data * 5 + 0.1 * np.random.randn(199).reshape(-1, n),
+    #     test_size=0.25, random_state=0)
+    # plt.scatter(X_train, y_train)
+    #
+    # for i in range(1000):
+    #     LR_test.fit(X_train, y_train)
+    #     if not i % 100:
+    #         print(loss_function(LR_test(X_train), y_train))
+    #         plt.scatter(X_train, y_train)
+    #         plt.plot(X_test, LR_test(X_test))
+    #         plt.show()
