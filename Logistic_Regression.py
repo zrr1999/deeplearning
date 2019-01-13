@@ -1,4 +1,4 @@
-from Linear_Regression import LinearRegression, mean_square_error
+from Linear_Regression import LinearRegression
 import numpy as np
 
 
@@ -38,7 +38,8 @@ if __name__ == "__main__":
     X = np.array([[3, 3], [2, 2]])
     Y = np.array([[0], [1]])
     print(LR_test(X))
-    for i in range(500):
+    for i in range(5000):
         LR_test.fit(X, Y)
-        print(cross_entropy(LR_test(X), Y))
+        if not (i+1)%50:
+            print("进度：{:.0f}%，当前损失：{}".format(i/50,cross_entropy(LR_test(X), Y)))
     print(LR_test(X))

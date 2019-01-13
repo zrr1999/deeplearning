@@ -3,9 +3,9 @@ import numpy as np
 
 
 class PolynomialRegression(LinearRegression):
-    def __init__(self, n, *f):
+    def __init__(self, n, *f, **kwargs):
         self.num_f = len(f) + 1  # 除了输入的函数集还有线性函数
-        super(PolynomialRegression, self).__init__(n * self.num_f)
+        super(PolynomialRegression, self).__init__(n * self.num_f, **kwargs)
         self.f = f
 
     def __call__(self, x):
@@ -22,11 +22,11 @@ class PolynomialRegression(LinearRegression):
 
 
 if __name__ == "__main__":
-    PR_test = PolynomialRegression(1, np.exp, np.log)
-    X = np.array([[1],[2],[3]])
-    Y = np.exp(X)
-    print(PR_test(X))
-    for i in range(1000):
+    PR_test = PolynomialRegression(1, np.exp, np.log, learning_rate=0.01)
+    X = np.array([[1], [2], [3]])
+    Y = 5*np.exp(X)+X*np.log(X)+100
+    for i in range(5000):
         PR_test.fit(X, Y)
-        print(mean_square_error(PR_test(X), Y))
+        if not (i+1)%50:
+            print("进度：{:.0f}%，当前损失：{}".format(i/50,mean_square_error(PR_test(X), Y)))
     print(PR_test(X))
